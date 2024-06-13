@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fetch API Test</title>
+</head>
+<body>
+<h1>List of Students</h1>
+<button id="fetchButton">Fetch Students</button>
+<ul id="studentsList"></ul>
+
+<script>
+    document.getElementById('fetchButton').addEventListener('click', function() {
+        fetch('http://localhost:8080/alunos')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+                return response.json();
+            })
+            .then(data => {
+                const studentsList = document.getElementById('studentsList');
+                studentsList.innerHTML = ''; // Clear the list before adding new items
+                data.forEach(student => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = `ID: ${student.id}, Name: ${student.name}`;
+                    studentsList.appendChild(listItem);
+                });
+            })
+            .catch(error => {
+                console.error('There has been a problem with your fetch operation:', error);
+            });
+    });
+</script>
+</body>
+</html>

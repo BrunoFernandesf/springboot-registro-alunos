@@ -53,4 +53,14 @@ public class AlunoController {
         BeanUtils.copyProperties(alunoRecordDto, alunoModel);
         return ResponseEntity.status(HttpStatus.OK).body(alunoRepository.save(alunoModel));
     }
+
+    @DeleteMapping("alunos/{id}")
+    public ResponseEntity<Object> deleteAlunos(@PathVariable(value = "id") UUID id){
+        Optional<AlunoModel> alunoO = alunoRepository.findById(id);
+        if(alunoO.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Aluno não encontrado");
+        }
+        alunoRepository.delete(alunoO.get());
+        return ResponseEntity.status(HttpStatus.OK).body("Aluno deletado com sucesso");
+    }
 }
